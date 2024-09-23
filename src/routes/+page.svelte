@@ -8,6 +8,7 @@
 
 	import { onMount } from 'svelte';
 	import toast, { Toaster } from 'svelte-french-toast';
+	import ModeToggler from '$lib/components/ModeToggler.svelte';
 
 	// Use Svelte stores for reactive state management
 	const formData = writable({
@@ -85,6 +86,7 @@
 
 <Toaster />
 <main class="container mx-auto flex flex-col gap-12 p-4">
+	<div class="fixed right-4 top-4"><ModeToggler /></div>
 	<div class="space-y-4">
 		<h1 class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight lg:text-5xl">
 			Metapulse

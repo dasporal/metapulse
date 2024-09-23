@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { ModeWatcher } from 'mode-watcher';
 </script>
 
 <title>Metapulse</title>
@@ -26,4 +27,5 @@
 <meta name="twitter:image" content="" />
 <meta name="twitter:site" content="@dasporal" />
 
+<ModeWatcher />
 <slot></slot>
