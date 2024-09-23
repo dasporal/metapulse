@@ -6,6 +6,9 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { writable } from 'svelte/store';
 
+	import { onMount } from 'svelte';
+	import toast, { Toaster } from 'svelte-french-toast';
+
 	// Use Svelte stores for reactive state management
 	const formData = writable({
 		title: '',
@@ -29,10 +32,14 @@
 		if (codeBlock) {
 			try {
 				await navigator.clipboard.writeText(codeBlock.textContent || '');
-				alert('Meta tags copied to clipboard!');
+				toast.success('Meta tags copied to clipboard!', {
+					position: 'bottom-right'
+				});
 			} catch (err) {
 				console.error('Failed to copy: ', err);
-				alert('Failed to copy to clipboard. Please try again.');
+				toast.error('Failed to copy to clipboard. Please try again.', {
+					position: 'bottom-right'
+				});
 			}
 		}
 	}
@@ -76,6 +83,7 @@
 	}
 </script>
 
+<Toaster />
 <main class="container mx-auto flex flex-col gap-12 p-4">
 	<div class="space-y-4">
 		<h1 class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -103,8 +111,7 @@
 						<Input
 							bind:value={$formData.description}
 							id="description"
-							placeholder="Page Description"
-						/>
+							placeholder="Page Description" />
 					</div>
 				</div>
 				<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -123,8 +130,7 @@
 						<Input
 							bind:value={$formData.image}
 							id="image"
-							placeholder="https://example.com/image.jpg"
-						/>
+							placeholder="https://example.com/image.jpg" />
 					</div>
 				</div>
 			</div>
@@ -147,8 +153,7 @@
 						<Input
 							bind:value={$formData.twitterHandle}
 							id="twitterHandle"
-							placeholder="@yourtwitterhandle"
-						/>
+							placeholder="@yourtwitterhandle" />
 					</div>
 				</div>
 			</div>
@@ -163,8 +168,7 @@
 					<div class="flex items-center space-x-2">
 						<Checkbox bind:checked={$formData.robotsFollow} id="robotsFollow" />
 						<Label for="robotsFollow"
-							>Allow following and let search engines follow links on this page.</Label
-						>
+							>Allow following and let search engines follow links on this page.</Label>
 					</div>
 				</div>
 			</div>
