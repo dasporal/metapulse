@@ -10,6 +10,8 @@
 	import toast, { Toaster } from 'svelte-french-toast';
 	import ModeToggler from '$lib/components/ModeToggler.svelte';
 
+	import Logo from '$lib/assets/logo.png';
+
 	// Use Svelte stores for reactive state management
 	const formData = writable({
 		title: '',
@@ -88,9 +90,12 @@
 <main class="container mx-auto flex flex-col gap-12 p-4">
 	<div class="fixed right-4 top-4"><ModeToggler /></div>
 	<div class="space-y-4">
-		<h1 class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight lg:text-5xl">
-			Metapulse
-		</h1>
+		<div class="flex flex-row items-center justify-center gap-4">
+			<img src={Logo} alt="Metapulse logo" class="h-24" />
+			<h1 class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight lg:text-5xl">
+				Metapulse
+			</h1>
+		</div>
 		<p class="text-center text-xl text-muted-foreground">Write once, copy everywhere.</p>
 	</div>
 	<div>
