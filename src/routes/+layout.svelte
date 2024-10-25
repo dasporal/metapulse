@@ -3,6 +3,11 @@
 	import { ModeWatcher } from 'mode-watcher';
 
 	import Logo from '$lib/assets/logo.png';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 </script>
 
 <title>Metapulse</title>
@@ -31,4 +36,4 @@
 <meta name="twitter:site" content="@dasporal" />
 
 <ModeWatcher />
-<slot></slot>
+{@render children?.()}

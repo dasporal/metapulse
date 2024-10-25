@@ -7,9 +7,10 @@
 	type $$Props = CheckboxPrimitive.Props;
 	type $$Events = CheckboxPrimitive.Events;
 
-	let className: $$Props['class'] = undefined;
-	export let checked: $$Props['checked'] = false;
-	export { className as class };
+	interface Props { [key: string]: any }
+
+	let { class: className = undefined, checked = $bindable(false), ...rest }: Props = $props();
+	
 </script>
 
 <CheckboxPrimitive.Root
@@ -18,7 +19,7 @@
 		className
 	)}
 	bind:checked
-	{...$$restProps}
+	{...rest}
 	on:click>
 	<CheckboxPrimitive.Indicator
 		class={cn('flex h-4 w-4 items-center justify-center text-current')}

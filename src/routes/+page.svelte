@@ -4,16 +4,14 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Checkbox } from '$lib/components/ui/checkbox';
-	import { writable } from 'svelte/store';
 
-	import { onMount } from 'svelte';
 	import toast, { Toaster } from 'svelte-french-toast';
 	import ModeToggler from '$lib/components/ModeToggler.svelte';
 
 	import Logo from '$lib/assets/logo.png';
 
 	// Use Svelte stores for reactive state management
-	const formData = writable({
+	const formData = $state({
 		title: '',
 		description: '',
 		url: '',
@@ -24,7 +22,7 @@
 		robotsFollow: true
 	});
 
-	let showMetaTags = false;
+	let showMetaTags = $state(false);
 
 	function generateMetaTags() {
 		showMetaTags = true;
@@ -48,7 +46,9 @@
 	}
 
 	// Function to generate robots content
-	$: robotsContent = `${$formData.robotsIndex ? 'index' : 'noindex'}, ${$formData.robotsFollow ? 'follow' : 'nofollow'}`;
+	let robotsContent = $derived(
+		`${formData.robotsIndex ? 'index' : 'noindex'}, ${formData.robotsFollow ? 'follow' : 'nofollow'}`
+	);
 
 	// Function to generate meta tags HTML
 	function generateMetaTagsHTML(data) {
@@ -99,7 +99,13 @@
 		<p class="text-center text-xl text-muted-foreground">Write once, copy everywhere.</p>
 	</div>
 	<div>
-		<form on:submit|preventDefault={generateMetaTags} class="space-y-8">
+		<form
+			onsubmit={(event) => {
+				event.preventDefault();
+
+				generateMetaTags?.(event);
+			}}
+			class="space-y-8">
 			<div class="space-y-4">
 				<h2 class="text-2xl font-bold">Basic Information</h2>
 				<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -108,7 +114,7 @@
 						<p class="text-sm text-muted-foreground">
 							The main title of your page, displayed in search results and browser tabs.
 						</p>
-						<Input bind:value={$formData.title} id="title" placeholder="Page Title" />
+						<Input bind:value={formData.title} id="title" placeholder="Page Title" />
 					</div>
 					<div class="space-y-2">
 						<Label for="description">Description</Label>
@@ -116,7 +122,7 @@
 							A brief summary of your page content, shown in search results.
 						</p>
 						<Input
-							bind:value={$formData.description}
+							bind:value={formData.description}
 							id="description"
 							placeholder="Page Description" />
 					</div>
@@ -127,7 +133,7 @@
 						<p class="text-sm text-muted-foreground">
 							The full URL of your page, including the protocol (http:// or https://).
 						</p>
-						<Input bind:value={$formData.url} id="url" placeholder="https://example.com" />
+						<Input bind:value={formData.url} id="url" placeholder="https://example.com" />
 					</div>
 					<div class="space-y-2">
 						<Label for="image">Image URL</Label>
@@ -135,7 +141,7 @@
 							The URL of the main image associated with your page, used in social media previews.
 						</p>
 						<Input
-							bind:value={$formData.image}
+							bind:value={formData.image}
 							id="image"
 							placeholder="https://example.com/image.jpg" />
 					</div>
@@ -150,7 +156,7 @@
 						<p class="text-sm text-muted-foreground">
 							The name of your website or brand, used in social media previews.
 						</p>
-						<Input bind:value={$formData.siteName} id="siteName" placeholder="Your Site Name" />
+						<Input bind:value={formData.siteName} id="siteName" placeholder="Your Site Name" />
 					</div>
 					<div class="space-y-2">
 						<Label for="twitterHandle">Twitter Handle</Label>
@@ -158,7 +164,7 @@
 							Your Twitter username, used for Twitter Card metadata.
 						</p>
 						<Input
-							bind:value={$formData.twitterHandle}
+							bind:value={formData.twitterHandle}
 							id="twitterHandle"
 							placeholder="@yourtwitterhandle" />
 					</div>
@@ -169,11 +175,11 @@
 				<h2 class="text-2xl font-bold">Robot Settings</h2>
 				<div class="flex flex-col gap-4">
 					<div class="flex items-center space-x-2">
-						<Checkbox bind:checked={$formData.robotsIndex} id="robotsIndex" />
+						<Checkbox bind:checked={formData.robotsIndex} id="robotsIndex" />
 						<Label for="robotsIndex">Allow indexing and let search engines index this page</Label>
 					</div>
 					<div class="flex items-center space-x-2">
-						<Checkbox bind:checked={$formData.robotsFollow} id="robotsFollow" />
+						<Checkbox bind:checked={formData.robotsFollow} id="robotsFollow" />
 						<Label for="robotsFollow"
 							>Allow following and let search engines follow links on this page.</Label>
 					</div>
@@ -190,7 +196,7 @@
 				</Card.Header>
 				<Card.Content>
 					<pre id="meta-tag-code" class="overflow-auto rounded-md bg-gray-800 p-4 text-white">
-						<code>{generateMetaTagsHTML($formData)}</code>
+						<code>{generateMetaTagsHTML(formData)}</code>
 					</pre>
 					<Button variant="secondary" class="mt-4 w-full" on:click={copyToClipboard}>
 						Copy to Clipboard
